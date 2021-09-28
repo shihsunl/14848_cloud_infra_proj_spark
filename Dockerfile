@@ -17,9 +17,12 @@ RUN apt install -y python3-pip
 RUN mkdir /temp
 WORKDIR /temp
 RUN cd /temp
-RUN git clone git@github.com:shihsunl/14848_cloud_infra_proj_spark.git
+RUN git clone https://github.com/shihsunl/14848_cloud_infra_proj_spark.git
 
 # install
+RUN cp -r /temp/14848_cloud_infra_proj_spark/* /temp/
+RUN ls /temp
+RUN ls /temp/install
 WORKDIR /temp/install
 RUN ./install.sh
 

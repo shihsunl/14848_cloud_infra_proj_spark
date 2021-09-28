@@ -1,5 +1,5 @@
 #! /bin/bash
 
-/temp/requirement/install.sh
-/temp/jdk/install.sh
-/temp/spark/install.sh
+/temp/install/requirement/install.sh
+/temp/install/jdk/install.sh
+/temp/install/spark/install.sh
