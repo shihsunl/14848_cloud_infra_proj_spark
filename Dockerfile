@@ -38,4 +38,6 @@ RUN cp -r /temp/14848_cloud_infra_proj_spark/* /temp/
 
 #ENTRYPOINT /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell
 #CMD nohup /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell >/dev/null 2>&1 && exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 hello:app
-CMD /temp/run.sh && /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell
+#CMD /temp/run.sh && /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-sql
+CMD /temp/run.sh
+
