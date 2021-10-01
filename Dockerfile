@@ -31,6 +31,7 @@ RUN mkdir /temp/spark
 WORKDIR /temp/spark
 RUN curl -L https://dlcdn.apache.org/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz -o spark-3.1.2-bin-hadoop3.2.tgz
 RUN tar -zxvf spark-3.1.2-bin-hadoop3.2.tgz
+ENV SPARK_HOME=/temp/spark/spark-3.1.2-bin-hadoop3.2
 
 WORKDIR /temp
 RUN git clone https://github.com/shihsunl/14848_cloud_infra_proj_spark.git
