@@ -1,12 +1,12 @@
 FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND noninteractive
 MAINTAINER Shih-Sung-Lin
-ENV PORT 8080
+ENV PORT 8088
 
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 ENV JAVA_HOME=/usr/lib/jdk1.8.0_211
 ENV PATH=$PATH:$JAVA_HOME/bin
-EXPOSE 4040
+EXPOSE 8080
 
 # setup
 RUN apt-get update
@@ -36,6 +36,8 @@ ENV SPARK_HOME=/temp/spark/spark-3.1.2-bin-hadoop3.2
 WORKDIR /temp
 RUN git clone https://github.com/shihsunl/14848_cloud_infra_proj_spark.git
 RUN cp -r /temp/14848_cloud_infra_proj_spark/* /temp/
+RUN cp /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf.template /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf
+RUN echo "spark.ui.proxyBase: /spark" >> /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf
 
 #ENTRYPOINT /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell
 #CMD nohup /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell >/dev/null 2>&1 && exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 hello:app
