@@ -25,4 +25,4 @@ spec:
           imagePullPolicy: Always
           name: spark-app
           ports:
-            - containerPort: 4040
+            - containerPort: 8080
