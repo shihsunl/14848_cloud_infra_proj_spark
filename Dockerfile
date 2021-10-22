@@ -1,12 +1,12 @@
 FROM ubuntu:18.04
 ENV DEBIAN_FRONTEND noninteractive
 MAINTAINER Shih-Sung-Lin
-ENV PORT 8088
+ENV PORT 8085
 
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 ENV JAVA_HOME=/usr/lib/jdk1.8.0_211
 ENV PATH=$PATH:$JAVA_HOME/bin
-EXPOSE 8080 22 443 8081 8088
+EXPOSE 8080 22 443 8081 8088 8085
 
 # setup
 RUN apt-get update
@@ -47,7 +47,8 @@ RUN echo 'test:test' | chpasswd # sets the password for the user test to test
 WORKDIR /temp
 RUN wget https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz &&\
     tar -zxvf gotty_linux_amd64.tar.gz &&\
-    echo "/temp/gotty -w bash > /temp/gotty.out >2&1 &" > gotty.sh && chmod 777 /temp/*
+    echo "/temp/gotty -p 8081 -w bash > /temp/gotty.out >2&1 &" > gotty.sh && chmod 777 /temp/*
 
-CMD /etc/init.d/ssh restart && /temp/run.sh && /temp/gotty -p 8081 -w bash
+WORKDIR /temp
+CMD /etc/init.d/ssh restart && nohup /temp/gotty.sh && /temp/run.sh
 
