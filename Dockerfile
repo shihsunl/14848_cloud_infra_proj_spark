@@ -6,11 +6,11 @@ ENV PORT 8088
 RUN echo "#!/bin/sh\nexit 0" > /usr/sbin/policy-rc.d
 ENV JAVA_HOME=/usr/lib/jdk1.8.0_211
 ENV PATH=$PATH:$JAVA_HOME/bin
-EXPOSE 8080
+EXPOSE 8080 22 443 8081 8088
 
 # setup
 RUN apt-get update
-RUN apt-get install -y git g++ software-properties-common build-essential language-pack-en unzip curl wget vim libpam0g-dev libssl-dev cmake cron libssl-dev openssl iputils-ping
+RUN apt-get install -y git g++ software-properties-common build-essential language-pack-en unzip curl wget vim libpam0g-dev libssl-dev cmake cron libssl-dev openssl iputils-ping openssh-server sudo
 RUN apt-get install -y python3
 RUN add-apt-repository ppa:deadsnakes/ppa -y
 RUN apt-get install -y python3-pip
@@ -39,8 +39,15 @@ RUN cp -r /temp/14848_cloud_infra_proj_spark/* /temp/
 RUN cp /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf.template /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf
 RUN echo "spark.ui.proxyBase: /spark" >> /temp/spark/spark-3.1.2-bin-hadoop3.2/conf/spark-defaults.conf
 
-#ENTRYPOINT /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell
-#CMD nohup /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-shell >/dev/null 2>&1 && exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 hello:app
-#CMD /temp/run.sh && /temp/spark/spark-3.1.2-bin-hadoop3.2/bin/spark-sql
-CMD /temp/run.sh
+# ssh
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 test
+RUN echo 'test:test' | chpasswd # sets the password for the user test to test
+
+# web terminal
+WORKDIR /temp
+RUN wget https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz &&\
+    tar -zxvf gotty_linux_amd64.tar.gz &&\
+    echo "/temp/gotty -w bash > /temp/gotty.out >2&1 &" > gotty.sh && chmod 777 /temp/*
+
+CMD /etc/init.d/ssh restart && /temp/run.sh && /temp/gotty -p 8081 -w bash
 

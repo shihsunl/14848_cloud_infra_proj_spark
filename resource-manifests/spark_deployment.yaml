@@ -26,3 +26,4 @@ spec:
           name: spark-app
           ports:
             - containerPort: 8080
+            - containerPort: 8081
