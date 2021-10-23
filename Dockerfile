@@ -47,7 +47,7 @@ RUN echo 'test:test' | chpasswd # sets the password for the user test to test
 WORKDIR /temp
 RUN wget https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz &&\
     tar -zxvf gotty_2.0.0-alpha.3_linux_amd64.tar.gz &&\
-    echo "/temp/gotty -a 0.0.0.0 -p 8081 --ws-origin ".*" -w bash > /temp/gotty.out >2&1 &" > /temp/gotty.sh && chmod 777 /temp/*
+    echo "/temp/gotty -a 0.0.0.0 -p 8081 --ws-origin '.*' -w bash > /temp/gotty.out >2&1 &" > /temp/gotty.sh && chmod 777 /temp/*
 
 WORKDIR /temp
 CMD /etc/init.d/ssh restart && nohup /temp/gotty.sh && /temp/run.sh
